@@ -1,0 +1,52 @@
+services:
+  eureka-server:
+    build:
+      context: .
+      args:
+        MODULE: eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      PORT: 8761
+      EUREKA_INSTANCE_HOSTNAME: eureka-server
+
+  dependency-service-1:
+    build:
+      context: .
+      args:
+        MODULE: dependency-service
+    ports:
+      - "8081:8081"
+    environment:
+      PORT: 8081
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+
+  dependency-service-2:
+    build:
+      context: .
+      args:
+        MODULE: dependency-service
+    ports:
+      - "8082:8082"
+    environment:
+      PORT: 8082
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+
+  consumer-service:
+    build:
+      context: .
+      args:
+        MODULE: consumer-service
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+      - dependency-service-1
+      - dependency-service-2
