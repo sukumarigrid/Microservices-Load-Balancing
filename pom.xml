@@ -22,6 +22,7 @@
         <module>eureka-server</module>
         <module>dependency-service</module>
         <module>consumer-service</module>
+        <module>api-gateway</module>
     </modules>
 
     <properties>

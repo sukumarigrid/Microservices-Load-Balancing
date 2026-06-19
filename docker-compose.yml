@@ -46,7 +46,22 @@ services:
     environment:
       PORT: 8080
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      LOAD_BALANCER_ALGORITHM: round-robin
     depends_on:
       - eureka-server
       - dependency-service-1
       - dependency-service-2
+
+  api-gateway:
+    build:
+      context: .
+      args:
+        MODULE: api-gateway
+    ports:
+      - "8088:8088"
+    environment:
+      PORT: 8088
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+      - consumer-service

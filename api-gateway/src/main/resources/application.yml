@@ -1,9 +1,16 @@
 spring:
   application:
-    name: consumer-service
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: consumer-service-api
+          uri: lb://consumer-service
+          predicates:
+            - Path=/api/**
 
 server:
-  port: ${PORT:8080}
+  port: ${PORT:8088}
 
 eureka:
   client:
@@ -17,8 +24,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info
-
-app:
-  load-balancer:
-    algorithm: ${LOAD_BALANCER_ALGORITHM:round-robin}
+        include: health,info,gateway
